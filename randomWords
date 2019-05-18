@@ -27,4 +27,5 @@ randomPassword() {
 	done
 	echo "$(randomWord)"
 }
-randomPassword 4
+
+randomPassword $1
