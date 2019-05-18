@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+randomNumber() {
+	randomN=$(head -c 500 /dev/urandom | tr -dc '0-9' | fold -w $1 | head -n 1 ) 
+	until [ $randomN -gt 1 ]
+	do
+		randomN=$(randomNumber $1)
+	done
+	echo $randomN
+}
+
+randomLineNumber() { 
+	random=$(randomNumber $(randomNumber 1)) 
+	until [ $random -le $(awk 'END {print NR}' /usr/share/dict/words) ] 
+	do 
+		random=$(randomNumber $(randomNumber 1)) 
+	done 
+	echo $random
+}
+randomWord() {
+	echo $(awk NR==$(randomLineNumber) /usr/share/dict/words)
+}
+
+randomPassword() {
+	for i in {2..$1}
+	do echo -n "$(randomWord)-"
+	done
+	echo "$(randomWord)"
+}
+randomPassword 4
